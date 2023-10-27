@@ -6,7 +6,7 @@ module.exports = class PgDbase {
     /**
     * Connects to the postgresql database.
     * @params database {object}: {database, user, password, host, port}
-    * @params queryCreateTable {string || array}: string || array = 'query' || ['query', 'query']
+    * @params queryCreateTable {string || array}: 'query' || ['query', 'query']
     * */
     constructor(database, queryCreateTable=null) {
         this.database = typeof database === 'object' ? database: null
