@@ -1,0 +1,22 @@
+{
+  "name": "pgdb-manager-node",
+  "version": "1.0.0",
+  "description": "Exemplo de construção de uma comunicação com banco de dados utilizando NodeJS.",
+  "main": "./bin/index.js",
+  "scripts": {
+    "install": "npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "[postgresql",
+    "node",
+    "banco",
+    "de",
+    "dados]"
+  ],
+  "author": "Artur dos Santos Shon",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
