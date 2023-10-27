@@ -23,11 +23,11 @@ module.exports = class PgDbase {
         }
     }
 
-    async execute (query) {
+    async execute (querySet) {
         const client = new Client(this.database)
         try {
             await client.connect()
-            let dataResponse = client.query(query)
+            let dataResponse = await client.query(querySet)
             return dataResponse.rows
         } catch (e) {
             return e
