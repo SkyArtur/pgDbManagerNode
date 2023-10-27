@@ -45,7 +45,10 @@ module.exports.queries = {
 ```javascript
 const {database, queries, querySet} = require('pgdb-manager-node')
 const express = require('express')
+const bodyParse = require('body-parser')
 const app = express()
+
+app.use(bodyParse.urlencoded({extended: true}))
 
 app.get('/', (req, res) => {
     database.execute(queries.selectAll)
@@ -53,4 +56,21 @@ app.get('/', (req, res) => {
             res.send(responseData)
         })
 })
+app.post('/new', (req, res) => {
+    const {name, birth, height, weight} = req.body
+    // utilizando a função querySet()
+    const query = querySet(
+        queries.insertInto,
+        [name, birth, height, weight]
+    )
+    database.execute(query)
+        .then(responseData => {
+            res.redirect('/')
+        })
+})
+
+
+app.listen(3003)
+
+
 ```
