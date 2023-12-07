@@ -4,14 +4,10 @@ Trabalhando com Node e Postgresql. Um pequeno gerenciador para conexão com um b
 ### Utilização:
 - Clone o repositório para a raiz do projeto NodeJs.
 ```shell
-git clone https://github.com/SkyArtur/pgDbManagerNode ./pgdb-manager-node
+git clone https://github.com/SkyArtur/pgDbManagerNode ./database
 ```
 
-- Instale o módulo usando npm.
-```shell
-npm i ./pgdb-manager-node --save
-```
-- Edite os parâmetros do banco de dados em: ./pgdb-manager-node/bin/index.js.
+- Edite os parâmetros do banco de dados em: ./database/index.js.
 ```javascript
 const params = {
     database: 'escola',
@@ -31,19 +27,11 @@ const createTable = `
         height NUMERIC(3, 2),
         weight NUMERIC(6, 3)
 );`
-
-module.exports.queries = {
-    selectAll: "SELECT * FROM persons;",
-    selectByID: "SELECT * FROM persons WHERE id = $1;",
-    insertInto: "INSERT INTO persons (name, birth, height, weight) VALUES ($1, $2, $3, $4);",
-    updateByID: "UPDATE persons SET (name) = ($1) WHERE id = $2;",
-    deleteByID: "DELETE FROM table WHERE id = ($1);"
-}
 ```
 
-- Importe aonde precisar na API Express.
+- Importe aonde precisar.
 ```javascript
-const {database, queries, querySet} = require('pgdb-manager-node')
+const { database } = require('./database')
 const express = require('express')
 const bodyParse = require('body-parser')
 const app = express()
@@ -51,16 +39,17 @@ const app = express()
 app.use(bodyParse.urlencoded({extended: true}))
 
 app.get('/', (req, res) => {
-    database.execute(queries.selectAll)
+    const query = database.setQuery('SELECT * FROM persons;')
+    database.execute(query)
         .then(responseData => {
             res.send(responseData)
         })
 })
+
 app.post('/new', (req, res) => {
     const {name, birth, height, weight} = req.body
-    // utilizando a função querySet()
-    const query = querySet(
-        queries.insertInto,
+    const query = database.setQuery(
+        "INSERT INTO persons (name, birth, height, weight) VALUES (%s, %s, %s, %s);",
         [name, birth, height, weight]
     )
     database.execute(query)
